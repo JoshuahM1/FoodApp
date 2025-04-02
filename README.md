@@ -1,3 +1,5 @@
+https://excalidraw.com/#room=61179d690873fd828579,wj05fEpKz8fRwTRxkjrFVg
+
 Objective:
 This project aims to design and implement a simplified online food delivery system
 using Java. It will serve as a practical exercise to demonstrate your understanding of
