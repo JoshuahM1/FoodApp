@@ -3,7 +3,7 @@ import java.util.Set;
 
 
 public class Menu {
-    private HashMap<String, Double> menuMap = new HashMap<>();
+    public HashMap<String, Double> menuMap = new HashMap<>();
     private HashMap<String, String> comboDetails = new HashMap<>();
 
     // Sample data from In-n-out branch in Salinas back in 2023

@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Set;
 
 /*  
 * This is a second version of the Menu class if we want to use the scanner tool
@@ -31,6 +32,11 @@ public class MenuScanner {
         comboDetails.put("Combo 02", "Cheeseburger, French Fries, and Drink (M)");
         menuMap.put("Combo 03", 7.9);
         comboDetails.put("Combo 01", "Hamburger, French Fries, and Drink (M)");
+    }
+
+    public Set<String> getItemList() {
+        Set<String> keys = menuMap.keySet();
+        return keys;
     }
 
     public void printMenu() {

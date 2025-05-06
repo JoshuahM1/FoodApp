@@ -5,10 +5,10 @@ import java.time.format.DateTimeFormatter;
 
 public class OrderDetail {
     public String orderID;
-    public String customerNameString;
+    public String customerNameString = "John Doe"; // Placeholder for customer name
+    public String orderStatus = "Pending"; // Placeholder for order status
     private List<String> foodOrderList = new ArrayList<>();
     private List<Integer> foodCountList = new ArrayList<>();
-    public String orderStatus;
 
     // This runs when an instance of this class is created
     { createOrderID(); }
@@ -42,9 +42,75 @@ public class OrderDetail {
 
     }
 
+    private void modifyOrder(String menuItem, int itemCount, Menu menu) {
+        if (menu.getItemList().contains(menuItem)) {
+            if (itemCount > 0) {
+                int index = foodOrderList.indexOf(menuItem);
+                if (index != -1) {
+                    foodCountList.set(index, itemCount);
+                    System.out.println("Updated " + menuItem + " to " + itemCount + " in your order.");
+                } else {
+                    System.out.println("Item not found in the order. Please add it first.");
+                }
+            } else {
+                System.out.println("Invalid quantity for " + menuItem + ". Quantity must be greater than 0.");
+            }
+        } else {
+            System.out.println("No such item as " + menuItem + ". Please check the menu.");
+        }
+    }
+
+    private void removeItem(String menuItem) {
+        int index = foodOrderList.indexOf(menuItem);
+        if (index != -1) {
+            foodOrderList.remove(index);
+            foodCountList.remove(index);
+            System.out.println("Removed " + menuItem + " from your order.");
+        } else {
+            System.out.println("Item not found in the order. Please check the item name.");
+        }
+    }
+
+    public double getTotalCost(Menu menu) {
+        double totalCost = 0.0;
+        if (foodOrderList.isEmpty()) {
+            System.out.println("No items in the order. Cannot calculate total cost.");
+            return totalCost;
+        }
+        for (int i = 0; i < foodOrderList.size(); i++) {
+            String item = foodOrderList.get(i);
+            int count = foodCountList.get(i);
+            if (menu.menuMap.containsKey(item)) {
+                totalCost += menu.menuMap.get(item) * count;
+            } else {
+                System.out.println("Item " + item + " not found in the menu. Cannot calculate total cost.");
+            }
+        }
+        return totalCost;
+    }
+
+    public void printReceipt(Menu menu) {
+        System.out.println("=========================================");
+        System.out.println("| Receipt for Order ID: " + orderID);
+        System.out.println("| Customer Name: " + customerNameString);
+        System.out.println("| Order Status: " + orderStatus);
+        System.out.println("-----------------------------------------");
+        System.out.println("| Items Ordered:");
+        for (int i = 0; i < foodOrderList.size(); i++) {
+            String item = foodOrderList.get(i);
+            int count = foodCountList.get(i);
+            System.out.println("| " + item + " x" + count + " - $" + (menu.menuMap.get(item) * count));
+        }
+        System.out.println("-----------------------------------------");
+        System.out.println("| Total Cost: $" + getTotalCost(menu));
+        System.out.println("=========================================");
+    }
+
     public static void main(String[] args) {
         Menu inNOut = new Menu();
         OrderDetail order = new OrderDetail();
         order.addItemAndQuantity("Hamburger", 2, inNOut);
+        order.printReceipt(inNOut);
+        order.modifyOrder("Hamburger", 4, inNOut);
     }
 }
