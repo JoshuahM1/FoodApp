@@ -32,7 +32,7 @@ public class ResturantList {
                 for(int x = 1; x < section.length;x++){
                     strMenu += section[x] +"\n";
                 }
-                Menu menu = new Menu(strMenu);
+                Menu menu = new Menu(strMenu, resturantname);
                 this.resturantList.put(resturantname, menu);
             }
 
@@ -43,7 +43,7 @@ public class ResturantList {
 
     public void printAllMenues(){
         for(String resturantName : resturantList.keySet()){
-            System.out.println(resturantName);
+            System.out.println("\n" + resturantName);
             resturantList.get(resturantName).displayMenu();
         }
     }

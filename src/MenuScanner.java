@@ -34,10 +34,14 @@ public class MenuScanner {
         comboDetails.put("Combo 01", "Hamburger, French Fries, and Drink (M)");
     }
 
+
+
     public Set<String> getItemList() {
         Set<String> keys = menuMap.keySet();
         return keys;
     }
+
+
 
     public void printMenu() {
         System.out.println("---------------------------------------");
