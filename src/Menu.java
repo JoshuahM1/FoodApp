@@ -33,7 +33,7 @@ public class Menu {
     private HashMap<String, Double> buildMenu(String menuCSV) {
         HashMap<String, Double> menu = new HashMap<>();
         String[] menuComponents = menuCSV.split("\n");
-        for (String s : menuComponents) {//optional add if statemnts for if list is odd error or not set up correctly
+        for (String s : menuComponents) {//optional add if statements for if list is odd error or not set up correctly
             String[] ItemAndCost = s.split(":");
             menu.put(ItemAndCost[0], Double.parseDouble(ItemAndCost[1]));
         }

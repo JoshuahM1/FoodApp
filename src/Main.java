@@ -2,11 +2,12 @@ import java.util.*;
 
 public class Main {
     public static ExistingUsersData usersData = new ExistingUsersData();
-    public static ResturantList resturantList;
+    public static RestaurantList restaurantList;
     public static OrderQueue orderQueue = new OrderQueue();
+    private static String divider = "--------------------------------------------------";
 
     public static void main(String[] args) {
-        resturantList = new ResturantList("src/menus.txt");
+        restaurantList = new RestaurantList("src/menus.txt");
         //this is are main driver function could even be made into driver class for future stuff
         processGeneralUser();
     }
@@ -27,8 +28,10 @@ public class Main {
             //if driver has current order for delivery give option of completing order
         }
         //code here could be made into proccess customer in person class or customer class could be made to hold future meathods
-        System.out.println("Welcome " + curUser.getName() + "!"); //part could be seperated into process customer class
-        System.out.println("Type view to view past orders or type place to place a new order");
+        System.out.println(divider);
+        System.out.println("Welcome " + curUser.getName() + " to EZ J's Food App!"); //part could be seperated into process customer class
+        System.out.println(divider);
+        System.out.println("Type 'view' to view past orders \nOR \nType 'place' to place a new order");
         if(listCheck(Arrays.asList("view", "place")).equals("view")){
             orderQueue.printCustomersOrder(curUser);
         }else {
@@ -44,13 +47,13 @@ public class Main {
 
     public static void processOrder(Person customer) {//Could be implemented into order detail and order detail holds Person already so person dosent need to get passed through
         //System.out.println("Welcome " + customer.getName());
-        System.out.println("Where would you like to order from the options are");
-        for (String c : resturantList.getResturantNames()) {
+        System.out.println("Where would you like to order from?");
+        for (String c : restaurantList.getRestaurantNames()) {
             System.out.println(c);
         }
-        String resturantName = listCheck(resturantList.getResturantNames());
-        Menu curMenu = resturantList.getMenu(resturantName);
-        System.out.println("Here is the menu for " + resturantName);
+        String restaurantName = listCheck(restaurantList.getRestaurantNames());
+        Menu curMenu = restaurantList.getMenu(restaurantName);
+        System.out.println("Here is the menu for " + restaurantName);
         curMenu.displayMenu();
         OrderDetail curOrder = new OrderDetail(customer.getName(), curMenu);
         System.out.println("To add items to order type the item name and then type done when complete or type exit to exit");
@@ -77,7 +80,7 @@ public class Main {
                 System.out.println("The current order is empty please add an item or type exit");
             }
         }
-        if (yesNoCheck("Would you like to comfirm your order?")) {
+        if (yesNoCheck("Would you like to confirm your order?")) {
             curOrder.createOrderID();
             curOrder.setComfirmed();
             orderQueue.addOrder(curOrder);
@@ -104,7 +107,7 @@ public class Main {
                     System.out.println("Please type a positive number");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input; please enter a integer.");
+                System.out.println("Invalid input; Please enter a integer.");
                 scanner.next();//random fix
             }
         }
@@ -133,7 +136,7 @@ public class Main {
 
     public static boolean yesNoCheck(String question) {//bool true if yes false if no takes in a question to keep asking
         Scanner scanner = new Scanner(System.in);
-        System.out.print(question + " y/n\n");
+        System.out.print(question + "y/n\n");
         while (true) {
             String status = scanner.nextLine();
             if (status.equals("y")) {
@@ -143,16 +146,17 @@ public class Main {
             } else if (status.equals("exit")) {
                 processGeneralUser();
             } else {
-                System.out.println(question + " Please reply with either y or n or exit");
+                System.out.println(question + "Please reply with either y or n or exit\n" + divider);
             }
         }
     }
 
-    public static Person getUser() {//creates a new user or retrives user from user list and chekc password
+    public static Person getUser() {//creates a new user or retrives user from user list and checks password
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome!");
+        System.out.println(divider);
+        System.out.println("Welcome to EZ J's Food App!");
         String name;
-        if (yesNoCheck("Do you already have profile with us?")) {
+        if (yesNoCheck(divider + "\n" + "Do you already have a profile with us?")) {
             System.out.println("Please input your username: ");
             //this part could be implemented in Existing user data part where it takes in a username and returns person if they exist
             while (true) {//checks if a profile with the username exists
@@ -164,7 +168,7 @@ public class Main {
                 if (username.equals("exit")) {
                     processGeneralUser();
                 }
-                System.out.println("No profile with that username found. try again or type exit");
+                System.out.println("No profile with that username found. \nTry again or type 'exit'");
             }
             System.out.println("Please enter you password: ");
             String password = scanner.nextLine();
@@ -184,10 +188,12 @@ public class Main {
 
     public static Person createNewProfile() {//Maybe could be implemendted in person but fine here because it needs accsess to user data and that
         //probably shouldnt exist in person
+        System.out.println(divider);
         System.out.println("Let's make you a new profile");
         Scanner scanner = new Scanner(System.in);
         //String name, String phoneNumber, String location, String password
-        System.out.println("Please pick a username");
+        System.out.println(divider);
+        System.out.println("Please enter a valid username");
         String name = scanner.nextLine();
         if (usersData.profileExists(name)) {
             while (!usersData.profileExists(name)) {
@@ -195,14 +201,20 @@ public class Main {
                 name = scanner.nextLine();
             }
         }
+        System.out.println(divider);
         System.out.println("Please pick a password");
         String password = scanner.nextLine();
+        System.out.println(divider);
         System.out.println("What is the address for delivery?");
-        String adress = scanner.nextLine();
-        System.out.println("Whats the best phone nubmer for contatct?");
+        System.out.println("Format: 1234 Main St, City, State, Zip");
+        String address = scanner.nextLine();
+        System.out.println(divider);
+        System.out.println("What's the best phone number for you?");
+        System.out.println("Format: 123-456-7890");
         String phoneNumber = scanner.nextLine();
-        Person newProfile = new Person(name, phoneNumber, adress, password);
-        if (yesNoCheck("Would you like to sign up as a driver?")) {//if they want to be a driver set tag
+        Person newProfile = new Person(name, phoneNumber, address, password);
+        if (yesNoCheck("Would you like to sign up as a driver?")) {
+            //if they want to be a driver set tag
             //should be implemented to create driver class and not sure if this will mess up other parts with the person
             // return so might take some restructuring if classes are not set up right
             newProfile.setDriver();

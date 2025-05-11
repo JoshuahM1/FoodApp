@@ -1,4 +1,4 @@
-InNOut
+In-N-Out
 Hamburger:3.4
 Cheeseburger:3.85
 Double-Double:5.4
@@ -15,7 +15,7 @@ Double-Double, French Fries, and Drink (M):9.9
 Cheeseburger, French Fries, and Drink (M):8.35
 Hamburger, French Fries, and Drink (M):7.9
 
-TacoBell
+Taco Bell
 Hamburger:3.4
 Cheeseburger:3.85
 Double-Double:5.4

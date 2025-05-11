@@ -1,7 +1,6 @@
 import java.util.LinkedList;
 
 public class Delivery extends Person{
-    private Double averageRating;
     private static LinkedList<Double> ratings;
     private static LinkedList<String> comments;
 
