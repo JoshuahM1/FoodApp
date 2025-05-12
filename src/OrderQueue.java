@@ -12,4 +12,8 @@ public class OrderQueue {
         // Remove the first order in the queue
         return orderQueue.remove();
     }
+
+    public boolean isEmpty() {
+        return orderQueue.isEmpty();
+    }
 }

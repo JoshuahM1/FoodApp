@@ -1,60 +1,48 @@
 import java.util.LinkedList;
 
-public class Delivery extends Person{
-    private Double averageRating;
-    private static LinkedList<Double> ratings;
-    private static LinkedList<String> comments;
+public class Delivery extends Person {
+    private LinkedList<Double> ratings = new LinkedList<>();
+    private LinkedList<String> comments = new LinkedList<>();
 
-    public Delivery(){
-        ratings = new LinkedList<Double>();
-        comments = new LinkedList<String>();
-    }
-    public static String getAverageRating(){
-        double total = 0;
-        for(double r : ratings){
-            total += r;
-        }
-        return ratingToStar(total/ratings.size());
+    public Delivery() {
+        // No-arg constructor
     }
 
-    private static String ratingToStar(double rating){
-        if(rating - Math.floor(rating) >= 0.5 ) {
-            return "★".repeat((int) rating) + "⯨";
-        }
-        return "★".repeat((int) rating);
-    }
-
-    public static String getPastRatings(){
-        String ret = "";
-        for(int i = 0; i < ratings.size(); i++){
-            ret += ratingToStar(ratings.get(i)) + " " + comments.get(i) + "\n";
-        }
-        return ret;
-    }
-
-    public void addCustomerRating(double rating, String comment){
-        if(ratings.size() > 10){
-            System.out.println(ratings.pop());
-            System.out.println(comments.pop());
+    public void addCustomerRating(double rating, String comment, String customerName) {
+        // Keep only the most recent 10 reviews
+        if (ratings.size() >= 10) {
+            ratings.removeFirst();
+            comments.removeFirst();
         }
         ratings.add(rating);
-        comments.add(super.getName() + " " + comment);
+        comments.add(customerName + ": " + comment);
     }
 
-    public static void main(String[] args){
-
-       // System.out.println(getAverageRating());
-        //System.out.println(getPastRatings());
-
-
-        Delivery d = new Delivery();
-        d.setName("tom");
-        for(int i = 0; i < 20; i++) {
-            d.addCustomerRating(2.3 + i, "good");
-            System.out.println(getAverageRating());
-            System.out.println(getPastRatings());
+    /**
+     * Get average rating as a double value.
+     */
+    public String getAverageRating() {
+        if (ratings.isEmpty()) return "No ratings yet";
+        double total = 0;
+        for (double r : ratings) {
+            total += r;
         }
+        double avg = total / ratings.size();
+        return String.format("%.1f", avg);
     }
 
-
+    /**
+     * Return all past ratings with comments, grouped per entry.
+     */
+    public String getPastRatings() {
+        if (ratings.isEmpty()) return "No ratings yet";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ratings.size(); i++) {
+            sb.append(String.format("%.1f", ratings.get(i)))
+              .append(" - ")
+              .append(comments.get(i))
+              .append("\n");
+        }
+        return sb.toString();
+    }
 }

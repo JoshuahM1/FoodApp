@@ -33,8 +33,8 @@ public class Menu {
         String[] menuComponents = menuCSV.split("\n");
         for (String s : menuComponents) {//optional add if statemnts for if list is odd error or not set up correctly
             String[] ItemAndCost = s.split(":");
-            System.out.println("item" + ItemAndCost[0]);
-            System.out.println("cost" + ItemAndCost[1]);
+            // System.out.println("item" + ItemAndCost[0]);
+            // System.out.println("cost" + ItemAndCost[1]);
             menu.put(ItemAndCost[0], Double.parseDouble(ItemAndCost[1]));
         }
         return menu;
