@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.Map;
 
 public class Delivery extends Person {
     private LinkedList<Double> ratings = new LinkedList<>();
@@ -6,6 +7,26 @@ public class Delivery extends Person {
 
     public Delivery() {
         // No-arg constructor
+    }
+
+    public OrderDetail acceptOrder(OrderQueue orderQueue, Map<String,String> orderDriverMap) {
+        // 1) remove the next order
+        OrderDetail curOrder = orderQueue.removeOrder();
+
+        // 2) mark it Out for delivery
+        curOrder.setPickedUp();
+
+        // 3) log to console, using the getter instead of direct field access
+        System.out.println(
+            "Picked up order #"
+            + curOrder.getOrderID()
+            + " for "
+            + curOrder.getCustomerNameString()
+        );
+
+        // 4) record which driver grabbed it
+        orderDriverMap.put(curOrder.getOrderID(), this.getName());
+        return curOrder;
     }
 
     public void addCustomerRating(double rating, String comment, String customerName) {

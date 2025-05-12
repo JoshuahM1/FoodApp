@@ -8,26 +8,21 @@ Soda (S):2.05
 Soda (M):2.2
 Soda (L):2.4
 Soda (XL):2.6
-Milk:0.99
-Hot Cocoa:2.2
-Coffee:1.35
-Double-Double, French Fries, and Drink (M):9.9
-Cheeseburger, French Fries, and Drink (M):8.35
-Hamburger, French Fries, and Drink (M):7.9
+1 combo (M):9.9
+2 combo (M):8.35
+3 combo (M):7.9
 
 TacoBell
-Hamburger:3.4
-Cheeseburger:3.85
-Double-Double:5.4
-French Fries:2.3
-Shakes:2.85
-Soda (S):2.05
-Soda (M):2.2
-Soda (L):2.4
-Soda (XL):2.6
-Milk:0.99
-Hot Cocoa:2.2
-Coffee:1.35
-Double-Double, French Fries, and Drink (M):9.9
-Cheeseburger, French Fries, and Drink (M):8.35
-Hamburger, French Fries, and Drink (M):7.9
+Cheesy Bean and Rice Burrito:1.49
+Double Stacked Taco:1.99
+Chicken Enchilada Burrito:2.49
+Loaded Beef Nachos:2.99
+Beefy 5-Layer Burrito:5.97
+Crunchwrap Supreme:7.55
+Soft Drink (S):1.89
+Soft Drink (M):1.99
+Soft Drink (L):2.09
+Soft Drink (XL):2.19
+Classic Luxe Cravings Box:5.0
+Supreme Luxe Cravings Box:7.0
+Discovery Luxe Cravings Box:9.0

@@ -90,55 +90,65 @@ public class Main {
    */
   public static Customer createOrLoginCustomer() {
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Welcome!");
-    if (yesNoCheck("Do you already have a profile with us? (y/n)")) {
-      while (true) {
-        System.out.print("Please enter your username: ");
-        String username = scanner.nextLine().trim();
-        if (username.equalsIgnoreCase("exit")) return null;
-        if (!customerData.profileExists(username)) {
-          System.out.println("No profile found. Try again or type 'exit'.");
-          continue;
-        }
-        System.out.print("Please enter your password: ");
-        String pw = scanner.nextLine();
-        if (customerData.checkPassword(username, pw)) {
-          return customerData.getProfile(username);
-        } else {
-          System.out.println("Incorrect password. Try again or type 'exit'.");
-        }
+
+    while (true) {
+      System.out.println("Welcome!");
+      boolean hasProfile = yesNoCheck("Do you already have a profile with us? (y/n)");
+      if (!hasProfile) {
+        // user wants to sign up
+        return createNewCustomer();
+      }
+
+      // user says “yes” → attempt a login
+      System.out.print("Please enter your username:");
+      String username = scanner.nextLine().trim();
+
+      if (!customerData.profileExists(username)) {
+        System.out.println("No profile found. Let’s try again.\n");
+        continue;
+      }
+
+      // we have a username in the map → ask for password
+      System.out.print("Please enter your password: ");
+      String pw = scanner.nextLine();
+
+      if (customerData.checkPassword(username, pw)) {
+        return customerData.getProfile(username);
+      } else {
+        System.out.println("Incorrect password. Let’s start over.\n");
       }
     }
-    return createNewCustomer();
   }
 
   public static Delivery createOrLoginDelivery() {
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Welcome!");
-    if (yesNoCheck("Do you already have a profile with us? (y/n)")) {
-      while (true) {
+
+    while (true) {
+        System.out.println("Welcome!");
+        boolean hasProfile = yesNoCheck("Do you already have a profile with us? (y/n)");
+        if (!hasProfile) {
+            return createNewDelivery();
+        }
         System.out.print("Please enter your username: ");
         String username = scanner.nextLine().trim();
-        if (username.equalsIgnoreCase("exit")) return null;
+
         if (!deliveryData.profileExists(username)) {
-          System.out.println("No profile found. Try again or type 'exit'.");
-          continue;
+            System.out.println("No profile found. Let’s try again.\n");
+            continue;
         }
+
         System.out.print("Please enter your password: ");
         String pw = scanner.nextLine();
-        if (deliveryData.checkPassword(username, pw)) {
-          return deliveryData.getProfile(username);
-        } else {
-          System.out.println("Incorrect password. Try again or type 'exit'.");
-        }
-      }
-    }
-    return createNewDelivery();
-  }
 
-  /**
-   * Create a new Person or Delivery profile based on mode.
-   */
+        if (deliveryData.checkPassword(username, pw)) {
+            return deliveryData.getProfile(username);
+        } else {
+            System.out.println("Incorrect password. Let’s start over.\n");
+        }
+    }
+}
+
+
   public static Customer createNewCustomer() {
     Scanner scanner = new Scanner(System.in);
     System.out.println("Let's make you a new profile.");
@@ -203,16 +213,13 @@ public class Main {
         if (orderQueue.isEmpty()) {
           System.out.println("No pending orders at the moment.");
         } else {
-          OrderDetail next = orderQueue.removeOrder();
-          next.setPickedUp();
-          System.out.println("Picked up order #" + next.getOrderID() + " for " + next.customerNameString);
-          orderDriverMap.put(next.getOrderID(), driver.getName());
+          OrderDetail currOrder = driver.acceptOrder(orderQueue, orderDriverMap);
           if (yesNoCheck("Mark this order delivered? (y/n)")) {
-            next.setDelivered();
-            completedOrders.add(next);
-            System.out.println("Order #" + next.getOrderID() + " completed!");
+            currOrder.setDelivered();
+            completedOrders.add(currOrder);
+            System.out.println("Order #" + currOrder.getOrderID() + " completed!");
           } else {
-            orderQueue.addOrder(next);
+            orderQueue.addOrder(currOrder);
             System.out.println("Order re-queued.");
           }
         }
