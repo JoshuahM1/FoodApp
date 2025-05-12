@@ -52,7 +52,7 @@ public class OrderDetail extends Person{
                 foodCountList.add(itemCount);
             }
         }
-
+    }
 
 
 
@@ -110,13 +110,5 @@ public class OrderDetail extends Person{
         System.out.println("-----------------------------------------");
         System.out.println("| Total Cost: $" + getTotalCost(menu));
         System.out.println("=========================================");
-    }
-
-    public static void main(String[] args) {
-        Menu inNOut = new Menu();
-        //OrderDetail order = new OrderDetail("test");
-        //order.addItemAndQuantity("Hamburger", 2, inNOut);
-        //order.printReceipt(inNOut);
-        //order.modifyOrder("Hamburger", 4, inNOut);
     }
 }

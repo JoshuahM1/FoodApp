@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main {
   public static ExistingCustomerData customerData = new ExistingCustomerData();
   public static ExistingDeliveryData deliveryData = new ExistingDeliveryData();
-  public static ResturantList resturantList;
+  public static RestaurantList restaurantList;
   public static OrderQueue orderQueue = new OrderQueue();
 
   // Track completed orders and which driver delivered them
@@ -15,7 +15,7 @@ public class Main {
   public static Map<String, String> orderDriverMap = new HashMap<>();
 
   public static void main(String[] args) {
-    resturantList = new ResturantList("./src/menus.txt");
+    restaurantList = new RestaurantList("./src/menus.txt");
     Scanner scanner = new Scanner(System.in);
 
     while (true) {
@@ -239,16 +239,16 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
     System.out.println("Welcome " + customer.getName() + "!");
     System.out.println("Where would you like to order from? Options are:");
-    for (String name : resturantList.getResturantNames()) {
+    for (String name : restaurantList.getRestaurantNames()) {
       System.out.println(" - " + name);
     }
-    String restName = listCheck(resturantList.getResturantNames());
+    String restName = listCheck(restaurantList.getRestaurantNames());
     if (restName == null) return;
-    Menu menu = resturantList.getMenu(restName);
+    Menu menu = restaurantList.getMenu(restName);
     System.out.println("Here is the menu for " + restName + ":");
     menu.displayMenu();
 
-    OrderDetail order = new OrderDetail(customer.getName());
+    OrderDetail order = new OrderDetail(customer.getName(), menu);
     while (yesNoCheck("Would you like to add an item to your order? (y/n)")) {
       System.out.print("Enter item name: ");
       String itemName = scanner.nextLine().trim();
@@ -267,7 +267,7 @@ public class Main {
       order.addItemAndQuantity(itemName, qty, menu);
     }
     System.out.println("\nYour order summary:");
-    order.printReceipt(menu);
+    order.printReceipt();
 
     orderQueue.addOrder(order);
     System.out.println("Your order #" + order.getOrderID() + " has been queued for delivery.");
