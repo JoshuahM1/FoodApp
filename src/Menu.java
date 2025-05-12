@@ -4,6 +4,7 @@ import java.util.Set;
 
 public class Menu {
     private HashMap<String, Double> menuMap;
+    private String restaurantName;
 
 
     public Menu(){//default empty menu for inNout
@@ -24,30 +25,28 @@ public class Menu {
                 "Hamburger, French Fries, and Drink (M):7.9\n");
 
     }
-    public Menu(String menuCSV){//CSV with item,cost,item,cost
+    public Menu(String menuCSV, String restaurantName){//CSV with item,cost,item,cost
         this.menuMap = buildMenu(menuCSV);
+        this.restaurantName = restaurantName;
     }
 
     private HashMap<String, Double> buildMenu(String menuCSV) {
         HashMap<String, Double> menu = new HashMap<>();
         String[] menuComponents = menuCSV.split("\n");
-        for (String s : menuComponents) {//optional add if statemnts for if list is odd error or not set up correctly
+        for (String s : menuComponents) {//optional add if statements for if list is odd error or not set up correctly
             String[] ItemAndCost = s.split(":");
-            // System.out.println("item" + ItemAndCost[0]);
-            // System.out.println("cost" + ItemAndCost[1]);
             menu.put(ItemAndCost[0], Double.parseDouble(ItemAndCost[1]));
         }
         return menu;
     }
 
-    public HashMap<String, Double> getMenu(){
-        return this.menuMap;
-    }
+    public String getRestaurantName(){return this.restaurantName;}
+
+
 
 
     public Set<String> getItemList() {
-        Set<String> keys = this.menuMap.keySet();
-        return keys;
+        return this.menuMap.keySet();
     }
 
     public double getItemCost(String item){

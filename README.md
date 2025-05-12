@@ -4,6 +4,11 @@
 > Class Diagram can be located here  
 > https://drive.google.com/file/d/1KYt_O1vUsIws4RhIPxdjf87_TKwd3gM7/view?usp=sharing
 > ![Class Diagram](https://github.com/user-attachments/assets/833cfb94-9732-49c4-a2dc-de0789c32c83)
+>
+> New class diagram link
+> https://www.mermaidchart.com/raw/f532f967-c18d-4c59-849f-fc5e3191eab7?theme=light&version=v0.1&format=svg
+> https://www.mermaidchart.com/app/projects/4ba99fd4-76ec-47b8-accd-9d8cc15a98bf/diagrams/f532f967-c18d-4c59-849f-fc5e3191eab7/version/v0.1/edit
+> edit link but will updtate have to be updated when new push using copilot 
 
 
 # Objective:

@@ -1,4 +1,4 @@
-InNOut
+In-N-Out
 Hamburger:3.4
 Cheeseburger:3.85
 Double-Double:5.4
@@ -26,3 +26,4 @@ Soft Drink (XL):2.19
 Classic Luxe Cravings Box:5.0
 Supreme Luxe Cravings Box:7.0
 Discovery Luxe Cravings Box:9.0
+
