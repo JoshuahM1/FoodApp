@@ -15,16 +15,8 @@ public class OrderQueue {
         // Remove the first order in the queue
         return orderQueue.remove();
     }
-
-    public void printCustomersOrder(Person person){
-        for(OrderDetail o : this.orderQueue){
-            if(o.customerNameString.equals(person.getName())){
-                o.printReceipt();
-                System.out.println(o.getMenu().getRestaurantName());
-                o.printReceipt();
-                System.out.println("\n");
-            }
-
-        }
+    public boolean isEmpty() {
+        return orderQueue.isEmpty();
     }
 }
+

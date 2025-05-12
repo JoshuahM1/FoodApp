@@ -1,225 +1,300 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
-    public static ExistingUsersData usersData = new ExistingUsersData();
-    public static RestaurantList restaurantList;
-    public static OrderQueue orderQueue = new OrderQueue();
-    private static String divider = "--------------------------------------------------";
+  public static ExistingCustomerData customerData = new ExistingCustomerData();
+  public static ExistingDeliveryData deliveryData = new ExistingDeliveryData();
+  public static ResturantList resturantList;
+  public static OrderQueue orderQueue = new OrderQueue();
 
-    public static void main(String[] args) {
-        restaurantList = new RestaurantList("src/menus.txt");
-        //this is are main driver function could even be made into driver class for future stuff
-        processGeneralUser();
+  // Track completed orders and which driver delivered them
+  public static List<OrderDetail> completedOrders = new ArrayList<>();
+  public static Map<String, String> orderDriverMap = new HashMap<>();
+
+  public static void main(String[] args) {
+    resturantList = new ResturantList("./src/menus.txt");
+    Scanner scanner = new Scanner(System.in);
+
+    while (true) {
+      System.out.println("\n=== Welcome to Ez J's ===");
+      System.out.println("1) Customer mode");
+      System.out.println("2) Driver   mode");
+      System.out.println("3) Exit");
+      System.out.print("Choose an option: ");
+      String choice = scanner.nextLine().trim();
+
+      if (choice.equals("1")) {
+        // Customer mode
+        Customer customer = createOrLoginCustomer();
+        processReviews(customer);
+        if (yesNoCheck("Would you like to place a new order? (y/n)")) {
+          processOrder(customer);
+        }
+
+      } else if (choice.equals("2")) {
+        // Driver mode
+        Delivery delivery = createOrLoginDelivery();
+        processDriver(delivery);
+
+      } else if (choice.equals("3")) {
+        System.out.println("Goodbye!");
+        break;
+
+      } else {
+        System.out.println("Invalid option. Please select 1, 2, or 3.");
+      }
     }
 
-    //this is the main function that recursivly loops that processs users in It does a lot and is the default exit location where the user
-    //experince starts this should be made into multiple meathods as when add driver functionality it will get messy
-    //in general alot of things in this class if possible should be implemented in other classes if its fitting and also when doing so
-    //its best practice to not have to pass many arguments thorugh as the data should be avaiilable in the class that the meathod is in
-    //idealy unless it doesn't make sense arguments passed through methods should be things that are options for how the meathod will operate
-    //hopefully all this makes sense basicaly we dont want all these public static voids and they shouldnt be so complicated because the objects
-    //should be able to act like the objects they are for oop
-    public static void processGeneralUser() {//main function where we process the user through the delivery/ordering process
-        Person curUser = getUser();
-        if (curUser.isDriver()) {//code here could be made into a process driver meathod and implemented in driver
-            System.out.println("Hi driver " + curUser.getName());
-            System.out.println("");
-            //add code to processs driver by checkiing if driver has no orders currently and if so process one order from order que to be set order status to Outfordelivery
-            //if driver has current order for delivery give option of completing order
+    scanner.close();
+  }
+
+  /**
+   * Prompt customer to review any delivered-but-unreviewed orders.
+   */
+  public static void processReviews(Customer customer) {
+    Scanner scanner = new Scanner(System.in);
+    boolean found = false;
+    for (OrderDetail ord : completedOrders) {
+      if (ord.customerNameString.equals(customer.getName())
+          && !"Reviewed".equals(ord.orderStatus)) {
+        found = true;
+        System.out.println("\nOrder #" + ord.getOrderID() + " delivered! Please review:");
+        double rating;
+        while (true) {
+          System.out.print("Rating (1.0-5.0): ");
+          try {
+            rating = Double.parseDouble(scanner.nextLine().trim());
+            if (rating >= 1.0 && rating <= 5.0) break;
+          } catch (NumberFormatException e) {}
+          System.out.println("Invalid rating. Enter a number between 1.0 and 5.0.");
         }
-        //code here could be made into proccess customer in person class or customer class could be made to hold future meathods
-        System.out.println(divider);
-        System.out.println("Welcome " + curUser.getName() + " to EZ J's Food App!"); //part could be seperated into process customer class
-        System.out.println(divider);
-        System.out.println("Type 'view' to view past orders \nOR \nType 'place' to place a new order");
-        if(listCheck(Arrays.asList("view", "place")).equals("view")){
-            orderQueue.printCustomersOrder(curUser);
-        }else {
-            processOrder(curUser);
-        }
-        System.out.println("Thank you " + curUser.getName() + " have a nice day");
-        //add code to check if completed orders and give option to leave rating for driver
-        processGeneralUser();
+        System.out.print("Comments: ");
+        String comment = scanner.nextLine().trim();
+        String driverName = orderDriverMap.get(ord.getOrderID());
+        Delivery driver = deliveryData.getProfile(driverName);
+        customer.giveDeliveryRating(driver, rating, comment);
+        ord.orderStatus = "Reviewed";
+        System.out.println("Thanks for your feedback!");
+      }
     }
+    if (!found) {
+      System.out.println("No new reviews to write.");
+    }
+  }
 
+  /**
+   * Handles login or new Customer creation;
+   */
+  public static Customer createOrLoginCustomer() {
+    Scanner scanner = new Scanner(System.in);
 
+    while (true) {
+      System.out.println("Welcome!");
+      boolean hasProfile = yesNoCheck("Do you already have a profile with us? (y/n)");
+      if (!hasProfile) {
+        // user wants to sign up
+        return createNewCustomer();
+      }
 
+      // user says “yes” → attempt a login
+      System.out.print("Please enter your username:");
+      String username = scanner.nextLine().trim();
 
-    public static void processOrder(Person customer) {//Could be implemented into order detail and order detail holds Person already so person dosent need to get passed through
-        //System.out.println("Welcome " + customer.getName());
-        System.out.println("Where would you like to order from?");
-        for (String c : restaurantList.getRestaurantNames()) {
-            System.out.println(c);
+      if (!customerData.profileExists(username)) {
+        System.out.println("No profile found. Let’s try again.\n");
+        continue;
+      }
+
+      // we have a username in the map → ask for password
+      System.out.print("Please enter your password: ");
+      String pw = scanner.nextLine();
+
+      if (customerData.checkPassword(username, pw)) {
+        return customerData.getProfile(username);
+      } else {
+        System.out.println("Incorrect password. Let’s start over.\n");
+      }
+    }
+  }
+
+  public static Delivery createOrLoginDelivery() {
+    Scanner scanner = new Scanner(System.in);
+
+    while (true) {
+        System.out.println("Welcome!");
+        boolean hasProfile = yesNoCheck("Do you already have a profile with us? (y/n)");
+        if (!hasProfile) {
+            return createNewDelivery();
         }
-        String restaurantName = listCheck(restaurantList.getRestaurantNames());
-        Menu curMenu = restaurantList.getMenu(restaurantName);
-        System.out.println("Here is the menu for " + restaurantName);
-        curMenu.displayMenu();
-        OrderDetail curOrder = new OrderDetail(customer.getName(), curMenu);
-        System.out.println("To add items to order type the item name and then type done when complete or type exit to exit");
-        Scanner scanner = new Scanner(System.in);
-        String item = "";
-        while (!item.equals("done")) {
-            System.out.println("Please select an item from the menu, type done when complete. type exit to exit");
-            item = scanner.nextLine();
-            if (curOrder.itemInOrder(item)) {
-                System.out.println("How many " + item + "would you like? please type a number type 0 to remove item");
-                int ItemQuantiy = readPositiveInt();
-                if (ItemQuantiy == 0) {
-                    curOrder.removeItem(item);
-                } else {
-                    curOrder.modifyOrder(item, ItemQuantiy);
-                }
-            } else if (curMenu.containsItem(item)) {
-                System.out.println("How many " + item + " would you like please type a number");
-                int ItemQuantiy = readPositiveInt();
-                curOrder.addItemAndQuantity(item, ItemQuantiy);
-            } else if (item.equals("exit")) {
-                processGeneralUser();
-            } else if (curOrder.isEmpty() && item == "done") {
-                System.out.println("The current order is empty please add an item or type exit");
-            }
+        System.out.print("Please enter your username: ");
+        String username = scanner.nextLine().trim();
+
+        if (!deliveryData.profileExists(username)) {
+            System.out.println("No profile found. Let’s try again.\n");
+            continue;
         }
-        if (yesNoCheck("Would you like to confirm your order?")) {
-            curOrder.createOrderID();
-            curOrder.setComfirmed();
-            orderQueue.addOrder(curOrder);
-            curOrder.printReceipt();
-        }
-        if (yesNoCheck("Would you like to order from somewhere else or exit?")) {
-            processOrder(customer);
+
+        System.out.print("Please enter your password: ");
+        String pw = scanner.nextLine();
+
+        if (deliveryData.checkPassword(username, pw)) {
+            return deliveryData.getProfile(username);
         } else {
-            processGeneralUser();
+            System.out.println("Incorrect password. Let’s start over.\n");
         }
     }
+}
 
 
-    //write code to get customors order and then add order to que
-    //when done whith customer reprompt to see other order and then leave to process general user
-
-    public static int readPositiveInt() {
-        Scanner scanner = new Scanner(System.in);
-        int x = -100;
-        while (x < 0) {
-            try {
-                x = scanner.nextInt();
-                if (x < 0) {
-                    System.out.println("Please type a positive number");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input; Please enter a integer.");
-                scanner.next();//random fix
-            }
-        }
-        return x;
+  public static Customer createNewCustomer() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Let's make you a new profile.");
+    System.out.print("Please pick a username: ");
+    String name = scanner.nextLine().trim();
+    while (customerData.profileExists(name)) {
+      System.out.print("Username already exists. Pick another or type 'exit': ");
+      name = scanner.nextLine().trim();
+      if (name.equalsIgnoreCase("exit")) return null;
     }
+    System.out.print("Please pick a password: ");
+    String password = scanner.nextLine().trim();
+    System.out.print("What is the address for delivery? ");
+    String address = scanner.nextLine().trim();
 
+    System.out.print("What's the best phone number for contact? ");
+    String phone = scanner.nextLine().trim();
+    Customer c = new Customer();
+      c.setName(name);
+      c.setPhoneNumber(phone);
+      c.setLocation(address);
+      c.setPassword(password);
+      customerData.addUser(c);
+    return c;
+  }
 
-//checks a list of strings for input and returns if they are in the list
-    public static String listCheck(List<String> val) {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            String userPrompt = scanner.next();
-            for (String c : val) {
-                if (userPrompt.equals(c)) {
-                    return c;
-                }
-                if (userPrompt.equals("exit")) {
-                    processGeneralUser();
-                }
-            }
-            //print out here could be changed so instead of not found it takes in a string for the prompt
-            System.out.println("Not found please chose from " + String.join(",", val) +
-                    " or type exit");
-        }
+  public static Delivery createNewDelivery() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Let's make you a new profile.");
+    System.out.print("Please pick a username: ");
+    String name = scanner.nextLine().trim();
+    while (deliveryData.profileExists(name)) {
+      System.out.print("Username already exists. Pick another or type 'exit': ");
+      name = scanner.nextLine().trim();
+      if (name.equalsIgnoreCase("exit")) return null;
     }
+    System.out.print("Please pick a password: ");
+    String password = scanner.nextLine().trim();
+    System.out.print("What's the best phone number for contact? ");
+    String phone = scanner.nextLine().trim();
+    Delivery d = new Delivery();
+      d.setName(name);
+      d.setPhoneNumber(phone);
+      d.setLocation(null);
+      d.setPassword(password);
+      deliveryData.addUser(d);
+    return d;
+  }
 
-    public static boolean yesNoCheck(String question) {//bool true if yes false if no takes in a question to keep asking
-        Scanner scanner = new Scanner(System.in);
-        System.out.print(question + "y/n\n");
-        while (true) {
-            String status = scanner.nextLine();
-            if (status.equals("y")) {
-                return true;
-            } else if (status.equals("n")) {
-                return false;
-            } else if (status.equals("exit")) {
-                processGeneralUser();
-            } else {
-                System.out.println(question + "Please reply with either y or n or exit\n" + divider);
-            }
+  public static void processDriver(Delivery driver) {
+    Scanner scanner = new Scanner(System.in);
+    boolean keepGoing = true;
+    while (keepGoing) {
+      System.out.println("\nDriver menu:");
+      System.out.println("1) Pick up next order");
+      System.out.println("2) View my ratings");
+      System.out.println("3) Exit driver mode");
+      System.out.print("Enter choice: ");
+      String opt = scanner.nextLine().trim();
+
+      if (opt.equals("1")) {
+        if (orderQueue.isEmpty()) {
+          System.out.println("No pending orders at the moment.");
+        } else {
+          OrderDetail currOrder = driver.acceptOrder(orderQueue, orderDriverMap);
+          if (yesNoCheck("Mark this order delivered? (y/n)")) {
+            currOrder.setDelivered();
+            completedOrders.add(currOrder);
+            System.out.println("Order #" + currOrder.getOrderID() + " completed!");
+          } else {
+            orderQueue.addOrder(currOrder);
+            System.out.println("Order re-queued.");
+          }
         }
+      } else if (opt.equals("2")) {
+        System.out.println("Your average rating: " + driver.getAverageRating());
+        System.out.println("All reviews:\n" + driver.getPastRatings());
+      } else if (opt.equals("3")) {
+        keepGoing = false;
+      } else {
+        System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+      }
     }
+    System.out.println("Logging out of driver mode.\n");
+  }
 
-    public static Person getUser() {//creates a new user or retrives user from user list and checks password
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(divider);
-        System.out.println("Welcome to EZ J's Food App!");
-        String name;
-        if (yesNoCheck(divider + "\n" + "Do you already have a profile with us?")) {
-            System.out.println("Please input your username: ");
-            //this part could be implemented in Existing user data part where it takes in a username and returns person if they exist
-            while (true) {//checks if a profile with the username exists
-                String username = scanner.nextLine();
-                if (usersData.profileExists(username)) {
-                    name = username;
-                    break;
-                }
-                if (username.equals("exit")) {
-                    processGeneralUser();
-                }
-                System.out.println("No profile with that username found. \nTry again or type 'exit'");
-            }
-            System.out.println("Please enter you password: ");
-            String password = scanner.nextLine();
-            if (usersData.checkPassword(name, password)) {
-                return usersData.getProfile(name);
-            }
-            for (int i = 5; i > 0; i--) {//makes the user enter their password 5 chances then it exits
-                System.out.println("Incorrect password please retry " + i + "attempts remaining");
-                if (usersData.checkPassword(name, scanner.nextLine())) {
-                    return usersData.getProfile(name);
-                }
-            }
-        }
-        return createNewProfile();
-
+  public static void processOrder(Customer customer) {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Welcome " + customer.getName() + "!");
+    System.out.println("Where would you like to order from? Options are:");
+    for (String name : resturantList.getResturantNames()) {
+      System.out.println(" - " + name);
     }
+    String restName = listCheck(resturantList.getResturantNames());
+    if (restName == null) return;
+    Menu menu = resturantList.getMenu(restName);
+    System.out.println("Here is the menu for " + restName + ":");
+    menu.displayMenu();
 
-    public static Person createNewProfile() {//Maybe could be implemendted in person but fine here because it needs accsess to user data and that
-        //probably shouldnt exist in person
-        System.out.println(divider);
-        System.out.println("Let's make you a new profile");
-        Scanner scanner = new Scanner(System.in);
-        //String name, String phoneNumber, String location, String password
-        System.out.println(divider);
-        System.out.println("Please enter a valid username");
-        String name = scanner.nextLine();
-        if (usersData.profileExists(name)) {
-            while (!usersData.profileExists(name)) {
-                System.out.println("Username already exists please pick a different username or type exit");
-                name = scanner.nextLine();
-            }
-        }
-        System.out.println(divider);
-        System.out.println("Please pick a password");
-        String password = scanner.nextLine();
-        System.out.println(divider);
-        System.out.println("What is the address for delivery?");
-        System.out.println("Format: 1234 Main St, City, State, Zip");
-        String address = scanner.nextLine();
-        System.out.println(divider);
-        System.out.println("What's the best phone number for you?");
-        System.out.println("Format: 123-456-7890");
-        String phoneNumber = scanner.nextLine();
-        Person newProfile = new Person(name, phoneNumber, address, password);
-        if (yesNoCheck("Would you like to sign up as a driver?")) {
-            //if they want to be a driver set tag
-            //should be implemented to create driver class and not sure if this will mess up other parts with the person
-            // return so might take some restructuring if classes are not set up right
-            newProfile.setDriver();
-        }
-        usersData.addUser(newProfile);
-        return newProfile;
+    OrderDetail order = new OrderDetail(customer.getName());
+    while (yesNoCheck("Would you like to add an item to your order? (y/n)")) {
+      System.out.print("Enter item name: ");
+      String itemName = scanner.nextLine().trim();
+      if (!menu.containsItem(itemName)) {
+        System.out.println("Item not found. Please choose from the menu.");
+        continue;
+      }
+      System.out.print("Enter quantity for " + itemName + ": ");
+      int qty;
+      try {
+        qty = Integer.parseInt(scanner.nextLine().trim());
+      } catch (NumberFormatException e) {
+        System.out.println("Invalid number. Please try again.");
+        continue;
+      }
+      order.addItemAndQuantity(itemName, qty, menu);
     }
+    System.out.println("\nYour order summary:");
+    order.printReceipt(menu);
+
+    orderQueue.addOrder(order);
+    System.out.println("Your order #" + order.getOrderID() + " has been queued for delivery.");
+  }
+
+  public static String listCheck(List<String> options) {
+    Scanner scanner = new Scanner(System.in);
+    while (true) {
+      String input = scanner.nextLine().trim();
+      for (String opt : options) {
+        if (opt.equalsIgnoreCase(input)) {
+          return opt;
+        }
+      }
+      if (input.equalsIgnoreCase("exit")) return null;
+      System.out.println("Not a valid option. Please retry or type 'exit'.");
+    }
+  }
+
+  public static boolean yesNoCheck(String prompt) {
+    Scanner scanner = new Scanner(System.in);
+    System.out.print(prompt + " ");
+    while (true) {
+      String resp = scanner.nextLine().trim().toLowerCase();
+      if (resp.equals("y")) return true;
+      if (resp.equals("n") || resp.equals("exit")) return false;
+      System.out.print("Please reply with 'y' or 'n' (or 'exit'): ");
+    }
+  }
 }
