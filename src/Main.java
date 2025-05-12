@@ -19,7 +19,7 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
 
     while (true) {
-      System.out.println("\n=== Welcome to QuickBites ===");
+      System.out.println("\n=== Welcome to Ez J's ===");
       System.out.println("1) Customer mode");
       System.out.println("2) Driver   mode");
       System.out.println("3) Exit");
