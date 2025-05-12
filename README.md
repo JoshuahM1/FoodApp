@@ -7,6 +7,8 @@
 >
 > New class diagram link
 > https://www.mermaidchart.com/raw/f532f967-c18d-4c59-849f-fc5e3191eab7?theme=light&version=v0.1&format=svg
+> https://www.mermaidchart.com/app/projects/4ba99fd4-76ec-47b8-accd-9d8cc15a98bf/diagrams/f532f967-c18d-4c59-849f-fc5e3191eab7/version/v0.1/edit
+> edit link but will updtate have to be updated when new push using copilot 
 
 
 # Objective:
