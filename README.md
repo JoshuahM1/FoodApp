@@ -1,4 +1,6 @@
 https://www.mermaidchart.com/raw/f532f967-c18d-4c59-849f-fc5e3191eab7?theme=light&version=v0.1&format=svg
+![image](https://github.com/user-attachments/assets/eb766013-dae2-4a14-95f5-0b0659c71f23)
+
 > Shared Workspace  
 > https://excalidraw.com/#room=61179d690873fd828579,wj05fEpKz8fRwTRxkjrFVg  
 > Class Diagram can be located here  
