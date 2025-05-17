@@ -1,29 +1,155 @@
+Big Sky Cafe
+Pub Burger: 9.50
+Chicken Wings (6): 7.25
+Margherita Pizza (10″): 11.00
+Loaded Fries: 5.75
+Craft Beer (Pint): 6.00
+Shake Flight (3×2 oz): 4.95
+
+Blaze Pizza
+Build Your Own Pizza: 9.95
+Pepperoni Pizza (11″): 10.95
+Veggie Pizza (11″): 10.95
+Wings (6): 7.50
+Fountain Drink (M): 2.25
+Pizza + Drink (M): 11.95
+
+Blitz Coffee Roasters
+Drip Coffee: 2.00
+Latte: 3.50
+Espresso: 2.25
+Cold Brew: 3.25
+Pastry: 2.75
+Coffee + Pastry: 4.50
+
+Blue Moon Smokehouse
+Smoked Brisket Sandwich: 9.95
+Pulled Pork Sandwich: 8.50
+Ribs (Half Rack): 12.95
+BBQ Combo (2 Meats + 2 Sides): 15.95
+Mac & Cheese: 3.50
+Tea (M): 2.00
+
+Donut Joint
+Classic Donut: 1.25
+Specialty Donut: 1.75
+Muffin: 2.00
+Coffee: 1.50
+Donut + Coffee: 2.50
+
+Egghead’s
+Breakfast Burrito: 5.95
+Avocado Toast: 6.25
+Pancake Stack: 7.50
+Omelette: 6.75
+Juice: 2.50
+Burrito + Juice: 8.25
+
+Firestone Grill
+Tri-Tip Sandwich: 8.95
+Chicken Sandwich: 7.50
+Veggie Sandwich: 6.75
+Garlic Fries: 3.25
+Salad Bowl: 7.99
+BBQ Combo (Tri-Tip + Fries + Soda): 11.95
+
+High Street Deli
+Turkey Sandwich: 7.25
+Roast Beef Sandwich: 7.75
+Veggie Wrap: 6.50
+Chips: 1.50
+Soda (M): 1.95
+Sandwich + Chips + Soda: 9.25
+
 In-N-Out
-Hamburger:3.4
-Cheeseburger:3.85
-Double-Double:5.4
-French Fries:2.3
-Shakes:2.85
-Soda (S):2.05
-Soda (M):2.2
-Soda (L):2.4
-Soda (XL):2.6
-1 combo (M):9.9
-2 combo (M):8.35
-3 combo (M):7.9
+Hamburger: 3.40
+Cheeseburger: 3.85
+Double-Double: 5.40
+Fries: 2.30
+Shake: 2.85
+Soda (S): 2.05
+Soda (M): 2.20
+Soda (L): 2.40
+Soda (XL): 2.60
+Milk: 0.99
+Hot Cocoa: 2.20
+Coffee: 1.35
+Double-Double + Fries + Soda (M): 9.90
+Cheeseburger + Fries + Soda (M): 8.35
+Hamburger + Fries + Soda (M): 7.90
 
-TacoBell
-Cheesy Bean and Rice Burrito:1.49
-Double Stacked Taco:1.99
-Chicken Enchilada Burrito:2.49
-Loaded Beef Nachos:2.99
-Beefy 5-Layer Burrito:5.97
-Crunchwrap Supreme:7.55
-Soft Drink (S):1.89
-Soft Drink (M):1.99
-Soft Drink (L):2.09
-Soft Drink (XL):2.19
-Classic Luxe Cravings Box:5.0
-Supreme Luxe Cravings Box:7.0
-Discovery Luxe Cravings Box:9.0
+JP Pancake House
+Buttermilk Pancakes: 6.50
+Belgian Waffle: 7.25
+French Toast: 6.75
+Bacon & Eggs: 8.50
+Coffee: 2.25
+Pancakes + Coffee: 8.75
 
+Luna Red
+Fish Tacos (3): 11.50
+Grilled Salmon Salad: 12.25
+Steak Frites: 14.95
+Bruschetta: 8.50
+Margarita: 8.00
+Tacos + Drink: 13.95
+
+Margarita’s Mexican Grill
+Cheese Enchiladas (2): 8.00
+Carne Asada Tacos (3): 7.50
+Chicken Quesadilla: 7.25
+Guac & Chips: 3.95
+Horchata: 2.50
+Enchiladas + Tacos + Drink: 12.95
+
+Old San Luis BBQ
+Brisket Plate: 13.95
+Pulled Chicken Plate: 11.95
+Sausage Link: 7.50
+Side (each): 2.50
+BBQ Plate + Side: 14.95
+
+Pismo Fish & Bar
+Fish & Chips: 10.95
+Shrimp Po’ Boy: 9.50
+Clam Chowder (Cup): 4.50
+Mahi Bowl: 12.50
+Iced Tea: 2.00
+Chowder + Drink: 5.95
+
+Splash Café
+Clam Chowder (Bowl): 6.25
+Clam Chowder (Bread Bowl): 8.50
+Fish & Chips: 9.75
+Shrimp Roll: 7.95
+Iced Tea: 2.00
+Chowder + Drink: 7.95
+
+Taco Bell
+Crunchy Taco: 1.50
+Soft Taco: 1.70
+Crunchwrap Supreme: 4.50
+Quesadilla: 5.25
+Nachos BellGrande: 5.75
+Chips & Salsa: 2.00
+Churro: 1.25
+Soda (M): 1.99
+Soda (L): 2.29
+Mountain Dew Baja Blast (M): 2.19
+Burrito Combo (Burrito + Chips & Salsa + Soda M): 8.49
+
+The Penny Ice Creamery
+Single Scoop: 3.50
+Double Scoop: 5.50
+Waffle Cone: +1.00
+Milkshake: 4.75
+Root Beer Float: 5.25
+Scoop + Cone: 4.50
+
+Woodstock’s Pizza
+Margherita Pizza (12″): 12.25
+Pepperoni Pizza (12″): 13.75
+BBQ Chicken Pizza (12″): 14.50
+Garlic Knots (6): 4.25
+House Salad: 5.50
+Pizza Slice + Soda: 5.25
